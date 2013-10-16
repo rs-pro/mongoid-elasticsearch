@@ -1,0 +1,17 @@
+services: 
+  - mongodb
+  - elasticsearch
+
+notifications:
+  email: false
+
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - jruby-19mode
+
+gemfile:
+  - Gemfile
+  - gemfiles/mongoid-4.0.gemfile
+
