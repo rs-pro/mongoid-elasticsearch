@@ -1,10 +1,11 @@
 module Mongoid
   module Elasticsearch
     class Es
-      attr_reader :klass
+      attr_reader :klass, :version
 
       def initialize(klass)
         @klass = klass
+        @version = Gem::Version.new(client.info['version']['number'])
       end
 
       def client
@@ -47,7 +48,12 @@ module Mongoid
         search({match_all: {}}, options)
       end
 
+      def completion_supported?
+        @version > Gem::Version.new('0.90.2')
+      end
+
       def completion(text, field = "suggest")
+        raise "Completion not supported in ES #{@version}" unless completion_supported?
         body = {
           q: {
             text: clean_string(text),

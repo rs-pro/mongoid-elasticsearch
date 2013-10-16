@@ -6,14 +6,19 @@ class Article
   field :tags
 
   include Mongoid::Elasticsearch
+  i_fields = {
+    name:     {type: 'string', analyzer: 'snowball'},
+    raw:      {type: 'string', index: :not_analyzed}
+  }
+
+  if Gem::Version.new(::Elasticsearch::Client.new.info['version']['number']) > Gem::Version.new('0.90.2')
+    i_fields[:suggest] = {type: 'completion'} 
+  end
+
   elasticsearch! index_name: 'mongoid_es_news', prefix_name: false, index_mappings: {
     name: {
       type: 'multi_field',
-      fields: {
-        name:     {type: 'string', analyzer: 'snowball'},
-        raw:      {type: 'string', index: :not_analyzed},
-        suggest:  {type: 'completion'} 
-      }
+      fields: i_fields
     },
     tags: {type: 'string', include_in_all: false}
   }, wrapper: :load

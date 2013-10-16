@@ -40,11 +40,15 @@ describe Article do
       results.first.name.should eq @article_2.name
     end
 
-    it 'completion' do
-      Article.es.completion('te', 'name.suggest').should eq [
-        {"text"=>"test article name likes", "score"=>1.0},
-        {"text"=>"tests likely an another article title", "score"=>1.0}
-      ]
+    if Article.es.completion_supported?
+      it 'completion' do
+        Article.es.completion('te', 'name.suggest').should eq [
+          {"text"=>"test article name likes", "score"=>1.0},
+          {"text"=>"tests likely an another article title", "score"=>1.0}
+        ]
+      end
+    else
+      pending "completion suggester not supported in ES version #{Article.es.version}"
     end
   end
 
