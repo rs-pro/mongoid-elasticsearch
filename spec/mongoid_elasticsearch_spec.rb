@@ -161,3 +161,7 @@ describe Nowrapper do
   end
 end
 
+describe "Multisearch" do
+  pending
+end
+
