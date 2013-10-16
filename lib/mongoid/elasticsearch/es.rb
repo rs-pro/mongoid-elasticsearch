@@ -21,8 +21,9 @@ module Mongoid
           query = {q: query}
         end
 
-        page = options.delete(:page)
-        per_page = options.delete(:per_page) || 50
+        page = options[:page]
+        options[:per_page] ||= 50
+        per_page = options[:per_page]
 
         query[:size] = ( per_page.to_i ) if per_page
         query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
@@ -48,9 +49,11 @@ module Mongoid
 
       def completion(text, field = "suggest")
         body = {
-          text: clean_string(text),
-          completion: {
-            field: field
+          q: {
+            text: clean_string(text),
+            completion: {
+              field: field
+            }
           }
         }
         results = client.suggest(index: index.name, body: body)

@@ -26,8 +26,8 @@ describe Article do
 
   context 'searching' do
     before :each do
-      @article_1 = Article.create!(name: 'test article name', tags: 'likely')
-      @article_2 = Article.create!(name: 'likely an another article title')
+      @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
+      @article_2 = Article.create!(name: 'tests likely an another article title')
       @article_3 = Article.create!(name: 'a strange name for this stuff')
       Article.es.index.refresh
     end
@@ -39,11 +39,19 @@ describe Article do
       results.first.id.should eq @article_2.id
       results.first.name.should eq @article_2.name
     end
+
+    it 'completion' do
+      Article.es.completion('te', 'name.suggest').should eq [
+        {"text"=>"test article name likes", "score"=>1.0},
+        {"text"=>"tests likely an another article title", "score"=>1.0}
+      ]
+    end
   end
 
   context 'pagination' do
     before :each do
-      10.times { Article.create(name: 'test') }
+      @articles = []
+      10.times { @articles << Article.create!(name: 'test') }
       Article.es.index.refresh
     end
 
@@ -52,7 +60,14 @@ describe Article do
     end
 
     it '#all' do
-      Article.es.all(per_page: 7, page: 2).to_a.size.should eq 3
+      result = Article.es.all(per_page: 7, page: 2)
+      result.num_pages.should eq 2
+      result.to_a.size.should eq 3
+      p1 = Article.es.all(per_page: 7, page: 1).to_a
+      p1.length.should eq 7
+      all = (result.to_a + p1).map(&:id).map(&:to_s).sort
+      all.length.should eq 10
+      all.should eq @articles.map(&:id).map(&:to_s).sort
     end
   end
 end

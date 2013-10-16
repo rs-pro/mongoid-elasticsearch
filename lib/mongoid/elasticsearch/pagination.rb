@@ -5,22 +5,16 @@ module Mongoid
   module Elasticsearch
     # Adds support for WillPaginate and Kaminari
     module Pagination
-
-      def default_per_page
-        10
-      end
-      module_function :default_per_page
-
       def total_entries
-        @total
+        total
       end
 
       def per_page
-        (@options[:per_page] || @options[:size] || default_per_page ).to_i
+        (@options[:per_page] || @options[:size] || 10 ).to_i
       end
 
       def total_pages
-        ( @total.to_f / per_page ).ceil
+        ( total.to_f / per_page ).ceil
       end
 
       def current_page

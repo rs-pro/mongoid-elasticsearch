@@ -30,6 +30,15 @@ module Mongoid
         response
       end
 
+      def total
+        if @total.nil?
+          perform!
+          @total
+        else
+          @total
+        end
+      end
+
       def raw_response
         @raw_response ||= perform!
       end
