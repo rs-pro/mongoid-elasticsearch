@@ -68,8 +68,10 @@ Or install it yourself as:
     Post.es.index.reset # recreate index
     Post.es.index.refresh # force index update (useful for specs)
     Post.es.client # Elasticsearch::Client instance
-                   # more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
-    
+
+more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
+
+ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html
 
 ### Advanced:
 
