@@ -50,7 +50,7 @@ Or install it yourself as:
 
 ## Usage
 
-Basic: 
+### Basic:
 
     class Post
       include Mongoid::Document
@@ -63,10 +63,19 @@ Basic:
     result.raw_response
     result.results # by default returns an Enumerable with Post instances exactly
                    # like they were loaded from MongoDB
+    Post.es.index.create # create index (done automatically on app boot)
+    Post.es.index.destroy # drop index
+    Post.es.index.reset # recreate index
+    Post.es.index.refresh # force index update (useful for specs)
+    Post.es.client # Elasticsearch::Client instance
+                   # more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
+    
 
-Advanced:
+### Advanced:
 
     include Mongoid::Elasticsearch
+    # define index_options (raw elasticsearch index definition
+    # 
     elasticsearch! index_name: 'mongoid_es_news', prefix_name: false, index_options: {}, index_mappings: {
       name: {
         type: 'multi_field',
@@ -78,7 +87,17 @@ Advanced:
       },
       tags: {type: 'string', include_in_all: false}
     }, wrapper: :load
-
+    # customize what gets sent to elasticsearch:
+    def as_indexed_json
+      {
+        id: id.to_s,
+        name: name,
+        excerpt: excerpt
+      }
+    end
+    
+See more examples in specs.
+    
 ## Contributing
 
 1. Fork it
