@@ -58,7 +58,7 @@ Or install it yourself as:
       elasticsearch!
     end
 
-    Post.es.search 'test text'
+    Post.es.search 'test text' # shortcut for Post.es.search({q: 'test text'})
     result = Post.es.search query: {...}, facets: {...} etc
     result.raw_response
     result.results # by default returns an Enumerable with Post instances exactly
