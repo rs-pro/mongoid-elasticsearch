@@ -98,6 +98,7 @@ ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/i
       },
       tags: {type: 'string', include_in_all: false}
     }, wrapper: :load
+    
     # customize what gets sent to elasticsearch:
     def as_indexed_json
       # id field is properly added automatically
@@ -107,6 +108,13 @@ ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/i
       }
     end
     
+### Possible wrappers for results:
+
+- :hash - raw hash from ES
+- :mash - Hashie::Mash ('hashie' must be added to gemfile)
+- :load - load each found model by ID from database
+- :model - create a model instance from data stored in elasticsearch
+
 See more examples in specs.
     
 ## Contributing
