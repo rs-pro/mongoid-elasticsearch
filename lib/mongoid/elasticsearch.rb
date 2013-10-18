@@ -3,6 +3,7 @@ require "mongoid/elasticsearch/version"
 require 'elasticsearch'
 require 'active_support/concern'
 
+require 'mongoid/elasticsearch/utils'
 require 'mongoid/elasticsearch/es'
 require 'mongoid/elasticsearch/callbacks'
 require 'mongoid/elasticsearch/index'

@@ -19,7 +19,7 @@ module Mongoid
 
       def search(query, options = {})
         if query.is_a?(String)
-          query = {q: query}
+          query = {q: Utils.clean(query)}
         end
 
         page = options[:page]
@@ -56,7 +56,7 @@ module Mongoid
         raise "Completion not supported in ES #{@version}" unless completion_supported?
         body = {
           q: {
-            text: clean_string(text),
+            text: Utils.clean(text),
             completion: {
               field: field
             }
@@ -64,10 +64,6 @@ module Mongoid
         }
         results = client.suggest(index: index.name, body: body)
         results['q'][0]['options']
-      end
-
-      def clean_string(sq)
-        sq.gsub(/\W+/, ' ').gsub(/ +/, '').strip
       end
     end
   end

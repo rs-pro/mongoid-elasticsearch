@@ -3,6 +3,8 @@ require "spec_helper"
 describe Article do
   it 'properly uses options' do
     Article.es_index_name.should eq 'mongoid_es_news'
+    Article.es.index.name.should eq 'mongoid_es_news'
+    Article.es.index.type.should eq 'articles'
     Article.es_wrapper.should eq :load
     Article.es_client_options.should eq({})
   end
@@ -163,5 +165,72 @@ end
 
 describe "Multisearch" do
   pending
+end
+
+describe Namespaced::Model do
+  it 'properly uses options' do
+    Namespaced::Model.es_index_name.should eq 'mongoid_es_test_namespaced_models'
+    Namespaced::Model.es.index.name.should eq 'mongoid_es_test_namespaced_models'
+    Namespaced::Model.es.index.type.should eq 'namespaced/models'
+    Namespaced::Model.es_wrapper.should eq :model
+    Namespaced::Model.es_client_options.should eq({})
+  end
+
+  context 'index operations' do
+    it 'creates and destroys index' do
+      Namespaced::Model.es.index.exists?.should be_true
+      Namespaced::Model.es.index.delete
+      Namespaced::Model.es.index.exists?.should be_false
+      Namespaced::Model.es.index.create
+      Namespaced::Model.es.index.exists?.should be_true
+    end
+  end
+
+  context 'adding to index' do
+    it 'successfuly saves mongoid document' do
+      article = Namespaced::Model.new(name: 'test article name')
+      article.save.should be_true
+    end
+  end
+
+  context 'searching' do
+    before :each do
+      @article_1 = Namespaced::Model.create!(name: 'test article name likes', tags: 'likely')
+      @article_2 = Namespaced::Model.create!(name: 'tests likely an another article title')
+      @article_3 = Namespaced::Model.create!(name: 'a strange name for this stuff')
+      Namespaced::Model.es.index.refresh
+    end
+
+    it 'searches and returns models' do
+      results = Namespaced::Model.es.search q: 'likely'
+      results.count.should eq 1
+      results.to_a.count.should eq 1
+      results.first.id.should eq @article_2.id
+      results.first.name.should eq @article_2.name
+    end
+  end
+
+  context 'pagination' do
+    before :each do
+      @articles = []
+      10.times { @articles << Namespaced::Model.create!(name: 'test') }
+      Namespaced::Model.es.index.refresh
+    end
+
+    it '#search' do
+      Namespaced::Model.es.search('test', per_page: 7, page: 2).to_a.size.should eq 3
+    end
+
+    it '#all' do
+      result = Namespaced::Model.es.all(per_page: 7, page: 2)
+      result.num_pages.should eq 2
+      result.to_a.size.should eq 3
+      p1 = Namespaced::Model.es.all(per_page: 7, page: 1).to_a
+      p1.length.should eq 7
+      all = (result.to_a + p1).map(&:id).map(&:to_s).sort
+      all.length.should eq 10
+      all.should eq @articles.map(&:id).map(&:to_s).sort
+    end
+  end
 end
 
