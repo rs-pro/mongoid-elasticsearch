@@ -9,7 +9,7 @@ module Mongoid
         end
 
         after_destroy do
-          es_delete
+          es_update
         end
       end
     end

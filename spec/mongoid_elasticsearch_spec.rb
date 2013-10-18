@@ -26,6 +26,18 @@ describe Article do
     end
   end
 
+  context 'deleting from index' do
+    it 'deletes document from index when model is destroyed' do
+      Article.create(name: 'test article name')
+      Article.es.index.refresh
+      Article.es.all.count.should eq 1
+
+      Article.first.destroy
+      Article.es.index.refresh
+      Article.es.all.count.should eq 0
+    end
+  end
+
   context 'searching' do
     before :each do
       @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
