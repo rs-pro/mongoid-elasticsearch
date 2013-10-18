@@ -29,12 +29,12 @@ This gem is very simple and does not try hide any part of the ES REST api, it
   a model instance, ES 0.90.3 new completion suggester, etc (new features coming
   soon)
 
-## Why use it (alternatives list):
+## Alternatives list:
 
-- [(re)Tire](https://github.com/karmi/retire) - retired
-- [RubberBand](https://github.com/grantr/rubberband) - EOL
-- [Elasticsearch gem](https://github.com/elasticsearch/elasticsearch-ruby) - too low-level and complex
-
+- [(re)Tire](https://github.com/karmi/retire)
+- [RubberBand](https://github.com/grantr/rubberband) - EOL, no Mongoid
+- [Elasticsearch gem](https://github.com/elasticsearch/elasticsearch-ruby) - low-level
+- 
 ## Installation
 
 Add this line to your application's Gemfile:
