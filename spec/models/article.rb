@@ -1,6 +1,7 @@
 class Article
   include Mongoid::Document
   include Mongoid::Timestamps::Short
+  include ActiveModel::ForbiddenAttributesProtection
 
   field :name
   field :tags
