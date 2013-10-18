@@ -31,9 +31,10 @@ This gem is very simple and does not try hide any part of the ES REST api, it
 
 ## Alternatives list:
 
+- [Elasticsearch gem](https://github.com/elasticsearch/elasticsearch-ruby) - low-level and hard for simple use-cases
 - [(re)Tire](https://github.com/karmi/retire)
 - [RubberBand](https://github.com/grantr/rubberband) - EOL, no Mongoid
-- [Elasticsearch gem](https://github.com/elasticsearch/elasticsearch-ruby) - low-level
+- [Mebla](https://github.com/cousine/mebla) - long dead
 
 ## Installation
 
