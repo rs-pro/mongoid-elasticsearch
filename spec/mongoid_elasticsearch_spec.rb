@@ -80,10 +80,27 @@ describe Article do
     it '#all' do
       result = Article.es.all(per_page: 7, page: 2)
       result.num_pages.should eq 2
+      result.current_page.should eq 2
+      result.total_entries.should eq 10
+      result.previous_page.should eq 1
+      result.next_page.should be_nil
       result.to_a.size.should eq 3
-      p1 = Article.es.all(per_page: 7, page: 1).to_a
+      result.out_of_bounds?.should be_false
+      result.first_page?.should be_false
+      result.last_page?.should be_true
+      
+      p1 = Article.es.all(per_page: 7, page: 1)
+      p1.out_of_bounds?.should be_false
+      p1.first_page?.should be_true
+      p1.last_page?.should be_false
+      p1.current_page.should eq 1
+      p1.next_page.should eq 2
+
+      p3 = Article.es.all(per_page: 7, page: 3)
+      p3.out_of_bounds?.should be_true
+
       p1.length.should eq 7
-      all = (result.to_a + p1).map(&:id).map(&:to_s).sort
+      all = (result.to_a + p1.to_a).map(&:id).map(&:to_s).sort
       all.length.should eq 10
       all.should eq @articles.map(&:id).map(&:to_s).sort
     end
