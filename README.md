@@ -20,6 +20,7 @@ with [Mongoid 4](https://github.com/mongoid/mongoid)
 - Allows for full power of elasticsearch when it's necessary
 - Indexes are automatically created if they don't exist on app boot
 - Works out of the box with zero configuration
+- Multi-model search with real model instances and pagination
 - Whole test suite is run against a real ES instance, no mocks
 
 This gem is very simple and does not try hide any part of the ES REST api, it
@@ -69,6 +70,12 @@ Or install it yourself as:
     Post.es.index.refresh # force index update (useful for specs)
     Post.es.client # Elasticsearch::Client instance
     Post.es.completion('te') # requires ES 0.90.3
+
+    # Search multiple models
+    # By default only searches in indexes managed by Mongoid::Elasticsearch
+    # to ignore other apps indexes in same ES instance
+    response = Mongoid::Elasticsearch.search 'test'
+
 
 more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
 
