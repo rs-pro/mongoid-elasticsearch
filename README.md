@@ -92,8 +92,8 @@ ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/i
     }, wrapper: :load
     # customize what gets sent to elasticsearch:
     def as_indexed_json
+      # id field is properly added automatically
       {
-        id: id.to_s,
         name: name,
         excerpt: excerpt
       }
