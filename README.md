@@ -34,7 +34,7 @@ This gem is very simple and does not try hide any part of the ES REST api, it
 - [(re)Tire](https://github.com/karmi/retire)
 - [RubberBand](https://github.com/grantr/rubberband) - EOL, no Mongoid
 - [Elasticsearch gem](https://github.com/elasticsearch/elasticsearch-ruby) - low-level
-- 
+
 ## Installation
 
 Add this line to your application's Gemfile:
