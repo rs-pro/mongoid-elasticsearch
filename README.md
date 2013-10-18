@@ -84,20 +84,41 @@ ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/i
 
 ### Advanced:
 
+prefix all app's index names:
+
+    Mongoid::Elasticsearch.prefix = 'my_app'
+
+default options for Elasticsearch::Client.new (url etc)
+ 
+    Mongoid::Elasticsearch.client_options = {hosts: ['localhost']}
+
+index definition options and custom model serialization:
+
     include Mongoid::Elasticsearch
-    # define index_options (raw elasticsearch index definition
-    # 
-    elasticsearch! index_name: 'mongoid_es_news', prefix_name: false, index_options: {}, index_mappings: {
-      name: {
-        type: 'multi_field',
-        fields: {
-          name:     {type: 'string', analyzer: 'snowball'},
-          raw:      {type: 'string', index: :not_analyzed},
-          suggest:  {type: 'completion'} 
-        }
+    elasticsearch!({
+      # index name (prefix is added)
+      index_name: 'mongoid_es_news',
+      
+      # don't use global name prefix
+      prefix_name: false,
+      
+      # elasticsearch index definition
+      index_options: {},
+
+      # or only mappings with empty options
+      index_mappings: {
+        name: {
+          type: 'multi_field',
+          fields: {
+            name:     {type: 'string', analyzer: 'snowball'},
+            raw:      {type: 'string', index: :not_analyzed},
+            suggest:  {type: 'completion'} 
+          }
+        },
+        tags: {type: 'string', include_in_all: false}
       },
-      tags: {type: 'string', include_in_all: false}
-    }, wrapper: :load
+      wrapper: :load
+    })
     
     # customize what gets sent to elasticsearch:
     def as_indexed_json
