@@ -45,4 +45,12 @@ RSpec.configure do |config|
     Nowrapper.es.index.reset
     Namespaced::Model.es.index.reset
   end
+
+  config.after(:all) do
+    DatabaseCleaner.clean
+    Article.es.index.delete
+    Post.es.index.delete
+    Nowrapper.es.index.delete
+    Namespaced::Model.es.index.delete
+  end
 end

@@ -29,23 +29,23 @@ module Mongoid
         query[:size] = ( per_page.to_i ) if per_page
         query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
 
-        Response.new(client, query.merge(type_options), false, klass, klass.es_wrapper, options)
+        Response.new(client, query.merge(type_options(true)), false, klass, klass.es_wrapper, options)
       end
 
-      def options_for(obj)
-        {id: obj.id.to_s}.merge type_options
+      def options_for(obj, escape = false)
+        {id: obj.id.to_s}.merge type_options(escape)
       end
 
-      def type_options
-        {index: index.name, type: Utils.escape(index.type)}
+      def type_options(escape = false)
+        {index: index.name, type: escape ? Utils.escape(index.type) : index.type}
       end
 
       def index_item(obj)
-        client.index({body: obj.as_indexed_json}.merge(options_for(obj)))
+        client.index({body: obj.as_indexed_json}.merge(options_for(obj, true)))
       end
 
       def remove_item(obj)
-        client.delete(options_for(obj))
+        client.delete(options_for(obj, true).merge(ignore: 404))
       end
 
       def all(options = {})

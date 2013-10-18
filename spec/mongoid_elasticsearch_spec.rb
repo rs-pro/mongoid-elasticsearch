@@ -236,6 +236,14 @@ describe Namespaced::Model do
       article = Namespaced::Model.new(name: 'test article name')
       article.save.should be_true
     end
+    it 'successfuly destroys mongoid document' do
+      article = Namespaced::Model.create(name: 'test article name')
+      Namespaced::Model.es.index.refresh
+      Namespaced::Model.es.all.count.should eq 1
+      article.destroy
+      Namespaced::Model.es.index.refresh
+      Namespaced::Model.es.all.count.should eq 0
+    end
   end
 
   context 'searching' do
