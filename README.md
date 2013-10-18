@@ -132,7 +132,7 @@ index definition options and custom model serialization:
 ### Possible wrappers for results:
 
 - :hash - raw hash from ES
-- :mash - Hashie::Mash ('hashie' must be added to gemfile)
+- :mash - [Hashie::Mash](https://github.com/intridea/hashie#mash) (gem '[hashie](https://github.com/intridea/hashie)' must be added to gemfile)
 - :load - load each found model by ID from database
 - :model - create a model instance from data stored in elasticsearch
 
