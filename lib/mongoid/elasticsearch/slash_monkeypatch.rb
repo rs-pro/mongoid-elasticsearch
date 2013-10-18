@@ -5,13 +5,9 @@ module Elasticsearch
     # Generic utility methods
     #
     module Utils
+      alias_method :__pathify_without_slashes, :__pathify
       def __pathify(*segments)
-        Array(segments).flatten.
-          compact.
-          reject { |s| s.to_s =~ /^\s*$/ }.
-          map { |s| __escape(s) }.
-          join('/').
-          squeeze('/').gsub('%252F', '%2F')
+        __pathify_without_slashes(*segments).gsub('%252F', '%2F')
       end
     end
   end
