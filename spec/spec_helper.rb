@@ -31,6 +31,7 @@ RSpec.configure do |config|
     Article.es.index.reset
     Post.es.index.reset
     Nowrapper.es.index.reset
+    Namespaced::Model.es.index.reset
   end
 
   config.before(:each) do
@@ -42,5 +43,6 @@ RSpec.configure do |config|
     Article.es.index.reset
     Post.es.index.reset
     Nowrapper.es.index.reset
+    Namespaced::Model.es.index.reset
   end
 end

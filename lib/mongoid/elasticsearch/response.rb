@@ -43,10 +43,13 @@ module Mongoid
         @raw_response ||= perform!
       end
 
+      def hits
+        @hits ||= raw_response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
+      end
+
       def results
         return [] if failure?
         @results ||= begin
-          hits = raw_response['hits']['hits']
           case @wrapper
           when :load
             if @multi
@@ -127,10 +130,10 @@ module Mongoid
                              "document has no _type property." unless type
 
         begin
-          klass = type.camelize.constantize
+          klass = type.camelize.singularize.constantize
         rescue NameError => e
           raise NameError, "You have tried to eager load the model instances, but " +
-                           "Tire cannot find the model class '#{type.camelize}' " +
+                           "Mongoid::Elasticsearch cannot find the model class '#{type.camelize}' " +
                            "based on _type '#{type}'.", e.backtrace
         end
       end
@@ -155,9 +158,17 @@ module Mongoid
       def multi_without_load
         hits.map do |h|
           klass = find_klass(h['_type'])
-          item = klass.new(h)
-          item.new_record = false
-          item
+          source = h.delete('_source')
+          begin
+            m = klass.new(h.merge(source))
+          rescue Mongoid::Errors::UnknownAttribute
+            klass.class_eval <<-RUBY, __FILE__, __LINE__+1
+              attr_accessor :_type, :_score, :_source
+            RUBY
+            m = klass.new(h.merge(source))
+          end
+          m.new_record = false
+          m
         end
       end
     end

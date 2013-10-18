@@ -6,6 +6,16 @@ module Namespaced
     field :name
 
     include Mongoid::Elasticsearch
-    elasticsearch!
+    elasticsearch! index_options: {
+      'namespaced/model' => {
+        mappings: {
+          properties: {
+            name: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
   end
 end

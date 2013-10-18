@@ -164,7 +164,23 @@ describe Nowrapper do
 end
 
 describe "Multisearch" do
-  pending
+  before :each do
+    @post_1 = Post.create!(name: 'test article name')
+    Post.es.index.refresh
+
+    @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
+    @article_2 = Article.create!(name: 'test likely an another article title')
+    Article.es.index.refresh
+
+    @ns_1 = Namespaced::Model.create!(name: 'test article name likes')
+    Namespaced::Model.es.index.refresh
+  end
+  it 'works' do
+    response = Mongoid::Elasticsearch.search 'test'
+    response.length.should eq 4
+    response.to_a.map(&:class).map(&:name).uniq.sort.should eq ['Article', 'Namespaced::Model', 'Post']
+    response.select { |r| r.class == Article && r.id == @article_1.id }.first.should_not be_nil
+  end
 end
 
 describe Namespaced::Model do
@@ -195,7 +211,7 @@ describe Namespaced::Model do
 
   context 'searching' do
     before :each do
-      @article_1 = Namespaced::Model.create!(name: 'test article name likes', tags: 'likely')
+      @article_1 = Namespaced::Model.create!(name: 'test article name likes')
       @article_2 = Namespaced::Model.create!(name: 'tests likely an another article title')
       @article_3 = Namespaced::Model.create!(name: 'a strange name for this stuff')
       Namespaced::Model.es.index.refresh
@@ -213,22 +229,26 @@ describe Namespaced::Model do
   context 'pagination' do
     before :each do
       @articles = []
-      10.times { @articles << Namespaced::Model.create!(name: 'test') }
+      20.times { @articles << Namespaced::Model.create!(name: 'test') }
       Namespaced::Model.es.index.refresh
     end
 
     it '#search' do
-      Namespaced::Model.es.search('test', per_page: 7, page: 2).to_a.size.should eq 3
+      Namespaced::Model.es.search('test', per_page: 10, page: 2).to_a.size.should eq 10
+      Namespaced::Model.es.search('test', per_page: 30, page: 2).to_a.size.should eq 0
+      Namespaced::Model.es.search('test', per_page: 2, page: 2).to_a.size.should eq 2
     end
 
     it '#all' do
-      result = Namespaced::Model.es.all(per_page: 7, page: 2)
-      result.num_pages.should eq 2
-      result.to_a.size.should eq 3
+      result = Namespaced::Model.es.all(per_page: 7, page: 3)
+      result.num_pages.should eq 3
+      result.to_a.size.should eq 6
       p1 = Namespaced::Model.es.all(per_page: 7, page: 1).to_a
+      p2 = Namespaced::Model.es.all(per_page: 7, page: 2).to_a
       p1.length.should eq 7
-      all = (result.to_a + p1).map(&:id).map(&:to_s).sort
-      all.length.should eq 10
+      p2.length.should eq 7
+      all = (result.to_a + p1 + p2).map(&:id).map(&:to_s).sort
+      all.length.should eq 20
       all.should eq @articles.map(&:id).map(&:to_s).sort
     end
   end

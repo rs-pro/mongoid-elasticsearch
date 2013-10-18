@@ -15,6 +15,12 @@ module Mongoid
     mattr_accessor :prefix
     self.prefix = ''
 
+    mattr_accessor :client_options
+    self.client_options = {}
+
+    mattr_accessor :registered_indexes
+    self.registered_indexes = []
+
     extend ActiveSupport::Concern
     included do
       def self.es
@@ -49,10 +55,12 @@ module Mongoid
 
         cattr_accessor :es_client_options, :es_index_name, :es_index_options, :es_wrapper
 
-        self.es_client_options = options[:client_options]
+        self.es_client_options = Mongoid::Elasticsearch.client_options.dup.merge(options[:client_options])
         self.es_index_name     = (options[:prefix_name] ? Mongoid::Elasticsearch.prefix : '') + (options[:index_name] || model_name.plural)
         self.es_index_options  = options[:index_options]
         self.es_wrapper        = options[:wrapper]
+
+        Mongoid::Elasticsearch.registered_indexes.push self.es_index_name
 
         unless options[:index_mappings].nil?
           self.es_index_options = self.es_index_options.deep_merge({
@@ -72,8 +80,26 @@ module Mongoid
     end
 
     # search multiple models
-    def self.search(query, wrapper = :model)
-      Response.new(es.client, nil, query, true, nil, wrapper)
+    def self.search(query, options = {}, wrapper = :model)
+      if query.is_a?(String)
+        query = {q: Utils.clean(query)}
+      end
+      # use `_all` or empty string to perform the operation on all indices
+      # regardless whether they are managed by Mongoid::Elasticsearch or not
+      unless query.key?(:index)
+        query.merge!(index: Mongoid::Elasticsearch.registered_indexes.join(','), ignore_indices: 'missing')
+      end
+
+      page = options[:page]
+      options[:per_page] ||= 50
+      per_page = options[:per_page]
+
+      query[:size] = ( per_page.to_i ) if per_page
+      query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
+
+
+      client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options
+      Response.new(client, query, true, nil, wrapper, options)
     end
   end
 end
