@@ -129,6 +129,8 @@ index definition options and custom model serialization:
       }
     end
     
+[Mapping definition docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html)    
+    
 ### Possible wrappers for results:
 
 - :hash - raw hash from ES
