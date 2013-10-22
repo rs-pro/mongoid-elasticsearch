@@ -41,7 +41,11 @@ module Mongoid
       end
 
       def type_options(escape = false)
-        {index: index.name, type: escape ? Utils.escape(index.type) : index.type}
+        if Elasticsearch::VERSION < '0.4.1'
+          {index: index.name, type: escape ? Utils.escape(index.type) : index.type}
+        else
+          {index: index.name, type: index.type}
+        end
       end
 
       def index_item(obj)
