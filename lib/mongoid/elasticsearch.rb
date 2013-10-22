@@ -9,7 +9,10 @@ require 'mongoid/elasticsearch/callbacks'
 require 'mongoid/elasticsearch/index'
 require 'mongoid/elasticsearch/indexing'
 require 'mongoid/elasticsearch/response'
-require 'mongoid/elasticsearch/slash_monkeypatch'
+
+if Elasticsearch::VERSION < '0.4.1'
+  require 'mongoid/elasticsearch/slash_monkeypatch'
+end
 
 module Mongoid
   module Elasticsearch

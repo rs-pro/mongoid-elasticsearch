@@ -32,6 +32,10 @@ module Mongoid
         Response.new(client, query.merge(type_options(true)), false, klass, klass.es_wrapper, options)
       end
 
+      def all(options = {})
+        search({match_all: {}}, options)
+      end
+
       def options_for(obj, escape = false)
         {id: obj.id.to_s}.merge type_options(escape)
       end
@@ -46,10 +50,6 @@ module Mongoid
 
       def remove_item(obj)
         client.delete(options_for(obj, true).merge(ignore: 404))
-      end
-
-      def all(options = {})
-        search({match_all: {}}, options)
       end
 
       def completion_supported?

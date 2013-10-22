@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "mongoid", github: "mongoid/mongoid", branch: "master"
+gem 'elasticsearch', github: 'elasticsearch/elasticsearch-ruby', branch: "master"
+
+gemspec path: "../"
