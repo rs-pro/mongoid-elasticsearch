@@ -14,7 +14,7 @@ module Mongoid
       end
 
       def type
-        klass.model_name.collection
+        klass.model_name.collection.singularize
       end
 
       def options

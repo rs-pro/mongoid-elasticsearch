@@ -11,12 +11,12 @@ module Mongoid
       attr_reader :time, :total, :options, :facets, :max
       attr_reader :response
 
-      def initialize(client, query, multi, model, wrapper, options)
+      def initialize(client, query, multi, model, options)
         @client  = client
         @query   = query
         @multi   = multi
         @model   = model
-        @wrapper = wrapper
+        @wrapper = options[:wrapper]
         @options = options
       end
 
@@ -44,7 +44,7 @@ module Mongoid
       end
 
       def hits
-        @hits ||= raw_response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
+        @hits ||= raw_response['hits']['hits']
       end
 
       def results
@@ -59,7 +59,8 @@ module Mongoid
             end
           when :mash
             hits.map do |h|
-              m = Hashie::Mash.new(h)
+              s = h.delete('_source')
+              m = Hashie::Mash.new(h.merge(s))
               m.id = BSON::ObjectId.from_string(h['_id'])
               m._id = m.id
               m

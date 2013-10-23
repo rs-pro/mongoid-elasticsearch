@@ -9,6 +9,7 @@ MODELS = File.join(File.dirname(__FILE__), "models")
 require "rubygems"
 require "rspec"
 require "mongoid"
+require "hashie"
 require "database_cleaner"
 
 require "mongoid-elasticsearch"

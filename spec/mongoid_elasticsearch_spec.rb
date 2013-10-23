@@ -4,7 +4,7 @@ describe Article do
   it 'properly uses options' do
     Article.es_index_name.should eq 'mongoid_es_news'
     Article.es.index.name.should eq 'mongoid_es_news'
-    Article.es.index.type.should eq 'articles'
+    Article.es.index.type.should eq 'article'
     Article.es_wrapper.should eq :load
     Article.es_client_options.should eq({})
   end
@@ -216,7 +216,7 @@ describe Namespaced::Model do
   it 'properly uses options' do
     Namespaced::Model.es_index_name.should eq 'mongoid_es_test_namespaced_models'
     Namespaced::Model.es.index.name.should eq 'mongoid_es_test_namespaced_models'
-    Namespaced::Model.es.index.type.should eq 'namespaced/models'
+    Namespaced::Model.es.index.type.should eq 'namespaced/model'
     Namespaced::Model.es_wrapper.should eq :model
     Namespaced::Model.es_client_options.should eq({})
   end
@@ -265,28 +265,45 @@ describe Namespaced::Model do
 
   context 'pagination' do
     before :each do
+      Namespaced::Model.es.index.reset
       @articles = []
       20.times { @articles << Namespaced::Model.create!(name: 'test') }
+      @a1 = Namespaced::Model.create!(name: 'irrelevant')
+      @a2 = Namespaced::Model.create!(name: 'unmatched')
       Namespaced::Model.es.index.refresh
+    end
+
+    it '#search ignores irrelevant' do
+      Namespaced::Model.es.search('irrelevant').to_a.size.should eq 1
+      Namespaced::Model.es.search('test').to_a.size.should eq 20
+    end
+
+    it '#search dynamic wrapper' do
+      Namespaced::Model.es.search('test', wrapper: :hash).map(&:class).map(&:name).uniq.should eq ['Hash']
+      Namespaced::Model.es.search('test', wrapper: :mash).map(&:class).map(&:name).uniq.should eq ['Hashie::Mash']
+      Namespaced::Model.es.search('test', wrapper: :mash).first.name.should eq 'test'
     end
 
     it '#search' do
       Namespaced::Model.es.search('test', per_page: 10, page: 2).to_a.size.should eq 10
       Namespaced::Model.es.search('test', per_page: 30, page: 2).to_a.size.should eq 0
       Namespaced::Model.es.search('test', per_page: 2, page: 2).to_a.size.should eq 2
+      Namespaced::Model.es.search(body: {query: {query_string: {query: 'test'}}}).to_a.length.should eq 20
     end
 
     it '#all' do
       result = Namespaced::Model.es.all(per_page: 7, page: 3)
-      result.num_pages.should eq 3
-      result.to_a.size.should eq 6
+      result.num_pages.should eq 4
+      result.to_a.size.should eq 7
       p1 = Namespaced::Model.es.all(per_page: 7, page: 1).to_a
       p2 = Namespaced::Model.es.all(per_page: 7, page: 2).to_a
+      p4 = Namespaced::Model.es.all(per_page: 7, page: 4).to_a
       p1.length.should eq 7
       p2.length.should eq 7
-      all = (result.to_a + p1 + p2).map(&:id).map(&:to_s).sort
-      all.length.should eq 20
-      all.should eq @articles.map(&:id).map(&:to_s).sort
+      p4.length.should eq 1
+      all = (p1 + p2 + result.to_a + p4).map(&:id).map(&:to_s).sort
+      all.length.should eq 22
+      all.should eq (@articles + [@a1, @a2]).map(&:id).map(&:to_s).sort
     end
   end
 end

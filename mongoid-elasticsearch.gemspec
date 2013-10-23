@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "kaminari"
   spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "hashie"
 end

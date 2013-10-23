@@ -84,7 +84,7 @@ module Mongoid
     end
 
     # search multiple models
-    def self.search(query, options = {}, wrapper = :model)
+    def self.search(query, options = {})
       if query.is_a?(String)
         query = {q: Utils.clean(query)}
       end
@@ -101,9 +101,10 @@ module Mongoid
       query[:size] = ( per_page.to_i ) if per_page
       query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
 
+      options[:wrapper] ||= :model
 
       client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options
-      Response.new(client, query, true, nil, wrapper, options)
+      Response.new(client, query, true, nil, options)
     end
   end
 end

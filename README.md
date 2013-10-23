@@ -61,7 +61,7 @@ Or install it yourself as:
     end
 
     Post.es.search 'test text' # shortcut for Post.es.search({q: 'test text'})
-    result = Post.es.search query: {...}, facets: {...} etc
+    result = Post.es.search body: {query: {...}, facets: {...}} etc
     result.raw_response
     result.results # by default returns an Enumerable with Post instances exactly
                    # like they were loaded from MongoDB
@@ -77,6 +77,8 @@ Or install it yourself as:
     # to ignore other apps indexes in same ES instance
     response = Mongoid::Elasticsearch.search 'test'
 
+
+search syntax docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions#search-instance_method
 
 more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
 

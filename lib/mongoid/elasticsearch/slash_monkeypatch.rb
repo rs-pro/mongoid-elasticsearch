@@ -7,7 +7,7 @@ module Elasticsearch
     module Utils
       alias_method :__pathify_without_slashes, :__pathify
       def __pathify(*segments)
-        __pathify_without_slashes(*segments).gsub('%252F', '%2F')
+        __pathify_without_slashes(*segments.map { |s| s.gsub('/', '%2F')}).gsub('%252F', '%2F')
       end
     end
   end

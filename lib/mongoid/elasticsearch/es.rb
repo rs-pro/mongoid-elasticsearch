@@ -29,31 +29,29 @@ module Mongoid
         query[:size] = ( per_page.to_i ) if per_page
         query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
 
-        Response.new(client, query.merge(type_options(true)), false, klass, klass.es_wrapper, options)
+        options[:wrapper] ||= klass.es_wrapper
+
+        Response.new(client, query.merge(type_options), false, klass, options)
       end
 
       def all(options = {})
         search({match_all: {}}, options)
       end
 
-      def options_for(obj, escape = false)
-        {id: obj.id.to_s}.merge type_options(escape)
+      def options_for(obj)
+        {id: obj.id.to_s}.merge type_options
       end
 
-      def type_options(escape = false)
-        if Elasticsearch::VERSION < '0.4.1'
-          {index: index.name, type: escape ? Utils.escape(index.type) : index.type}
-        else
-          {index: index.name, type: index.type}
-        end
+      def type_options
+        {index: index.name, type: index.type}
       end
 
       def index_item(obj)
-        client.index({body: obj.as_indexed_json}.merge(options_for(obj, true)))
+        client.index({body: obj.as_indexed_json}.merge(options_for(obj)))
       end
 
       def remove_item(obj)
-        client.delete(options_for(obj, true).merge(ignore: 404))
+        client.delete(options_for(obj).merge(ignore: 404))
       end
 
       def completion_supported?
