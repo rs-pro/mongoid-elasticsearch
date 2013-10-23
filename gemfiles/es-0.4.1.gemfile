@@ -2,5 +2,6 @@ source "https://rubygems.org"
 
 gem "mongoid", github: "mongoid/mongoid", branch: "master"
 gem 'elasticsearch', '0.4.1'
+gem 'mongoid_slug', github: 'glebtv/mongoid-slug'
 
 gemspec path: "../"
