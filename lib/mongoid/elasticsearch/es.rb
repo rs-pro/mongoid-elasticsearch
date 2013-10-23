@@ -35,7 +35,7 @@ module Mongoid
       end
 
       def all(options = {})
-        search({match_all: {}}, options)
+        search({body: {query: {match_all: {}}}}, options)
       end
 
       def options_for(obj)
