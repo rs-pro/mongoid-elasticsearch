@@ -16,6 +16,8 @@ gemfile:
   - Gemfile
   - gemfiles/mongoid-4.0.gemfile
   - gemfiles/es-git.gemfile
+  - gemfiles/es-0.4.0.gemfile
+  - gemfiles/es-0.4.1.gemfile
 
 matrix:
   allow_failures:
