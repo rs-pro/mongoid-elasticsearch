@@ -129,6 +129,7 @@ index definition options and custom model serialization:
         name: name,
         excerpt: excerpt
       }
+      # mongoid_slug note: add _slugs to as_indexed_json, NOT slug
     end
     
 [Mapping definition docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html)    

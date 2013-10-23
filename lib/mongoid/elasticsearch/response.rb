@@ -66,13 +66,7 @@ module Mongoid
               m
             end
           when :model
-            if @multi
-              multi_without_load
-            else
-              hits.map do |h|
-                model_from_hash(h)
-              end
-            end
+            multi_without_load
           else
             hits
           end

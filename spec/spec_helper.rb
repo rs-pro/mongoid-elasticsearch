@@ -16,6 +16,7 @@ require "rubygems"
 require "rspec"
 require "mongoid"
 require "hashie"
+require "mongoid_slug"
 require "database_cleaner"
 
 require "mongoid-elasticsearch"
@@ -26,9 +27,9 @@ Dir["#{MODELS}/*.rb"].each { |f| require f }
 
 Mongoid.configure do |config|
   config.connect_to "mongoid_elasticsearch_test"
+  config.logger = Logger.new($stdout, :info)
 end
-Mongoid.logger = Logger.new($stdout)
-
+Moped.logger = Logger.new($stdout, Logger::DEBUG)
 
 DatabaseCleaner.orm = "mongoid"
 

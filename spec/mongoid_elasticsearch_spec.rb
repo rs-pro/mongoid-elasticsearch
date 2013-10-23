@@ -54,6 +54,24 @@ describe Article do
       results.first.name.should eq @article_2.name
     end
 
+    it 'mongoid_slug with wrapper: :load' do
+      results = Article.es.search q: 'likely'
+      expect(Article).to receive(:find).once.with([@article_2.id.to_s]).and_call_original
+      results.first.slug.should eq @article_2.name.to_url
+      results.first.to_param.should eq @article_2.name.to_url
+    end
+
+    it 'mongoid_slug with wrapper: :model' do
+      sleep 3
+      results = Article.es.search 'likely', wrapper: :model
+      sleep 3
+      allow(Article).to receive(:find)
+      results.first.slug.should eq @article_2.name.to_url
+      results.first.to_param.should eq @article_2.name.to_url
+      expect(Article).to_not have_received(:find)
+    end
+
+
     if Article.es.completion_supported?
       it 'completion' do
         Article.es.completion('te', 'name.suggest').should eq [
@@ -204,6 +222,7 @@ describe "Multisearch" do
     @ns_1 = Namespaced::Model.create!(name: 'test article name likes')
     Namespaced::Model.es.index.refresh
   end
+
   it 'works' do
     response = Mongoid::Elasticsearch.search 'test'
     response.length.should eq 4
