@@ -210,6 +210,13 @@ describe "Multisearch" do
     response.to_a.map(&:class).map(&:name).uniq.sort.should eq ['Article', 'Namespaced::Model', 'Post']
     response.select { |r| r.class == Article && r.id == @article_1.id }.first.should_not be_nil
   end
+
+  it '#multi_with_load' do
+    response = Mongoid::Elasticsearch.search 'test', wrapper: :load
+    response.length.should eq 4
+    response.to_a.map(&:class).map(&:name).uniq.sort.should eq ['Article', 'Namespaced::Model', 'Post']
+    response.select { |r| r.class == Article && r.id == @article_1.id }.first.should_not be_nil
+  end
 end
 
 describe Namespaced::Model do
