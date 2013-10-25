@@ -95,7 +95,6 @@ module Mongoid
       end
 
       page = options[:page]
-      options[:per_page] ||= 50
       per_page = options[:per_page]
 
       query[:size] = ( per_page.to_i ) if per_page

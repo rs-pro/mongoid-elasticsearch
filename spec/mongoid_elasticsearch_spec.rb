@@ -301,7 +301,7 @@ describe Namespaced::Model do
 
     it '#search ignores irrelevant' do
       Namespaced::Model.es.search('irrelevant').to_a.size.should eq 1
-      Namespaced::Model.es.search('test').to_a.size.should eq 20
+      Namespaced::Model.es.search('test', per_page: 30).to_a.size.should eq 20
     end
 
     it '#search dynamic wrapper' do
@@ -314,7 +314,7 @@ describe Namespaced::Model do
       Namespaced::Model.es.search('test', per_page: 10, page: 2).to_a.size.should eq 10
       Namespaced::Model.es.search('test', per_page: 30, page: 2).to_a.size.should eq 0
       Namespaced::Model.es.search('test', per_page: 2, page: 2).to_a.size.should eq 2
-      Namespaced::Model.es.search(body: {query: {query_string: {query: 'test'}}}).to_a.length.should eq 20
+      Namespaced::Model.es.search(body: {query: {query_string: {query: 'test'}}}, size: 50).to_a.length.should eq 20
     end
 
     it '#all' do
