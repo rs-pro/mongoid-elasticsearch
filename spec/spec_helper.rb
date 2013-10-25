@@ -27,9 +27,9 @@ Dir["#{MODELS}/*.rb"].each { |f| require f }
 
 Mongoid.configure do |config|
   config.connect_to "mongoid_elasticsearch_test"
-  config.logger = Logger.new($stdout, :info)
+  #config.logger = Logger.new($stdout, :info)
 end
-Moped.logger = Logger.new($stdout, Logger::DEBUG)
+#Moped.logger = Logger.new($stdout, Logger::DEBUG)
 
 DatabaseCleaner.orm = "mongoid"
 

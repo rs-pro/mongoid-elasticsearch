@@ -112,12 +112,6 @@ module Mongoid
       alias_method :length, :size
 
       private
-      def model_from_hash(h)
-        source = h.delete('_source')
-        m = @model.new(h.merge(source))
-        m.new_record = false
-        m
-      end
 
       def find_klass(type)
         raise NoMethodError, "You have tried to eager load the model instances, " +
