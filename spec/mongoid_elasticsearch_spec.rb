@@ -123,6 +123,26 @@ describe Article do
       all.should eq @articles.map(&:id).map(&:to_s).sort
     end
   end
+
+  context 'destroy' do
+    before :each do
+      @articles = []
+      10.times { @articles << Article.create!(name: 'test') }
+      Article.es.index.refresh
+    end
+    it '#destroy' do
+      Article.es.all.count.should eq 10
+      @articles[0].destroy
+      Article.es.index.refresh
+      Article.es.all.count.should eq 9
+    end
+    it '#destroy_all' do
+      Article.es.all.count.should eq 10
+      Article.destroy_all
+      Article.es.index.refresh
+      Article.es.all.count.should eq 0
+    end
+  end
 end
 
 
