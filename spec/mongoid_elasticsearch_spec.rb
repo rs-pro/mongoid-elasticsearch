@@ -354,3 +354,8 @@ describe Namespaced::Model do
   end
 end
 
+describe 'utils' do
+  it 'doesnt strip non-ascii text' do
+    Mongoid::Elasticsearch::Utils.clean('тест {{').should eq 'тест'
+  end
+end

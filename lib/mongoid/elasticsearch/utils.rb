@@ -5,7 +5,7 @@ module Mongoid
   module Elasticsearch
     module Utils
       def clean(s)
-        s.to_s.gsub(/\W+/, ' ').gsub(/ +/, '').strip
+        s.to_s.gsub(/\P{Word}+/, ' ').gsub(/ +/, '').strip
       end
 
       extend self
