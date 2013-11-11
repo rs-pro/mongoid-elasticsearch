@@ -1,3 +1,4 @@
+# coding: utf-8
 # source: https://github.com/karmi/retire/blob/master/lib/tire/utils.rb
 require 'uri'
 

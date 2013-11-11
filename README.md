@@ -70,9 +70,25 @@ Or install it yourself as:
     Post.es.index.reset # recreate index
     Post.es.index.refresh # force index update (useful for specs)
     Post.es.client # Elasticsearch::Client instance
-    Post.es.completion('te') # requires ES 0.90.3
 
-    # Search multiple models
+### Completion: 
+
+    include Mongoid::Elasticsearch
+    elasticsearch! index_mappings: {
+      name: {
+        type: 'multi_field',
+        fields: {
+          name: {type: 'string', boost: 10},
+          suggest: {type: 'completion'}
+        }
+      },
+      desc: {type: 'string'},
+    }
+
+    Post.es.completion('te', 'name.suggest') # requires ES 0.90.3
+
+### Search multiple models:
+
     # By default only searches in indexes managed by Mongoid::Elasticsearch
     # to ignore other apps indexes in same ES instance
     response = Mongoid::Elasticsearch.search 'test'
