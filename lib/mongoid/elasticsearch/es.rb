@@ -68,7 +68,6 @@ module Mongoid
           }
         }
         results = client.suggest(index: index.name, body: body)
-        p results
         results['q'][0]['options']
       end
     end
