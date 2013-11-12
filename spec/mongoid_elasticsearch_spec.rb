@@ -359,4 +359,10 @@ describe 'utils' do
   it 'doesnt strip non-ascii text' do
     Mongoid::Elasticsearch::Utils.clean('тест {{').should eq 'тест'
   end
+  it 'doesnt strip good white space' do
+    Mongoid::Elasticsearch::Utils.clean('test test').should eq 'test test'
+  end
+  it 'strip extra white space' do
+    Mongoid::Elasticsearch::Utils.clean('    test     test    ').should eq 'test test'
+  end
 end
