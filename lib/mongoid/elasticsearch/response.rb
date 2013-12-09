@@ -148,6 +148,11 @@ module Mongoid
         hits.map do |h|
           klass = find_klass(h['_type'])
           source = h.delete('_source')
+          source.each do |k,v|
+            if v.is_a?(Hash) && v.has_key?("$oid")
+              source[k] = BSON::ObjectId.from_string(v["$oid"])
+            end
+          end
           begin
             m = klass.new(h.merge(source))
           rescue Mongoid::Errors::UnknownAttribute

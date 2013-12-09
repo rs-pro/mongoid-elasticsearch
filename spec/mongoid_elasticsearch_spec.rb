@@ -44,7 +44,9 @@ describe Article do
       @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
       @article_2 = Article.create!(name: 'tests likely an another article title')
       @article_3 = Article.create!(name: 'a strange name for this stuff')
+      @post_1 = Post.create!(name: 'object_id', my_object_id: BSON::ObjectId.new)
       Article.es.index.refresh
+      Post.es.index.refresh
     end
 
     it 'searches and returns models' do
@@ -70,6 +72,12 @@ describe Article do
       results.first.slug.should eq @article_2.name.to_url
       results.first.to_param.should eq @article_2.name.to_url
       expect(Article).to_not have_received(:find)
+    end
+
+    it 'restores BSON::ObjectId with wrapper :model' do
+      results = Post.es.search 'object_id'
+      results.first.my_object_id.should be_kind_of(BSON::ObjectId)
+      results.first.my_object_id.should eq(@post_1.my_object_id)
     end
 
 
