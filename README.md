@@ -149,7 +149,27 @@ index definition options and custom model serialization:
     end
     
 [Mapping definition docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html)    
-    
+### Pagination
+
+```= paginate @posts``` should work as normal with Kaminari after you do:
+
+    @posts = Post.es.search(params[:search], page: params[:page])
+    # or
+    @posts = Post.es.search({
+      body: {
+        query: {
+          query_string: {
+            query: params[:search]
+          }
+        },
+        filter: {
+          term: {community_id: @community.id.to_s}
+        }
+      }},
+      page: params[:page], wrapper: :load
+    )
+
+
 ### Possible wrappers for results:
 
 - :hash - raw hash from ES
