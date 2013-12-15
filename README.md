@@ -201,7 +201,12 @@ This is the preferred (fastest) method to reindex everything
 - :model - create a model instance from data stored in elasticsearch
 
 See more examples in specs.
-    
+
+#### Util
+
+    # Escape string so it can be safely passed to ES (removes all special characters)
+    Mongoid::Elasticsearch::Utils.clean(s)
+
 ## Contributing
 
 1. Fork it
