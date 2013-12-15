@@ -17,6 +17,22 @@ module Mongoid
         @index ||= Index.new(self)
       end
 
+      def index_all
+        index.reset
+        q = klass.order_by(_id: 1)
+        steps = (q.count / INDEX_STEP) + 1
+        steps.times do |step|
+          docs = q.skip(step * INDEX_STEP).limit(INDEX_STEP)
+          docs = docs.map do |obj|
+            { index: {data: obj.as_indexed_json}.merge(_id: obj.id.to_s) }
+          end
+          client.bulk({body: docs}.merge(type_options))
+          if block_given?
+            yield steps, step
+          end
+        end
+      end
+
       def search(query, options = {})
         if query.is_a?(String)
           query = {q: Utils.clean(query)}

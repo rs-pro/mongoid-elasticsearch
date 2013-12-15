@@ -16,6 +16,8 @@ end
 
 module Mongoid
   module Elasticsearch
+    INDEX_STEP = 300
+
     mattr_accessor :prefix
     self.prefix = ''
 

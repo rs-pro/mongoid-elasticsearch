@@ -346,6 +346,17 @@ describe Namespaced::Model do
       Namespaced::Model.es.search(body: {query: {query_string: {query: 'test'}}}, size: 50).to_a.length.should eq 20
     end
 
+    it 'bulk index' do
+      Namespaced::Model.es.index.reset
+      Namespaced::Model.es.index_all
+      Namespaced::Model.es.index.refresh
+      Namespaced::Model.es.search('test', per_page: 10, page: 2).to_a.size.should eq 10
+      Namespaced::Model.es.search('test', per_page: 30, page: 2).to_a.size.should eq 0
+      Namespaced::Model.es.search('test', per_page: 2, page: 2).to_a.size.should eq 2
+      Namespaced::Model.es.search(body: {query: {query_string: {query: 'test'}}}, size: 50).to_a.length.should eq 20
+    end
+
+
     it '#all' do
       result = Namespaced::Model.es.all(per_page: 7, page: 3)
       result.num_pages.should eq 4

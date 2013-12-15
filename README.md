@@ -149,6 +149,7 @@ index definition options and custom model serialization:
     end
     
 [Mapping definition docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html)    
+
 ### Pagination
 
 ```= paginate @posts``` should work as normal with Kaminari after you do:
@@ -169,6 +170,22 @@ index definition options and custom model serialization:
       page: params[:page], wrapper: :load
     )
 
+### Reindexing
+
+#### Simple
+
+    Communities::Thread.es.index.reset
+    Communities::Thread.enabled.each do |ingr|
+      ingr.es_update
+    end
+
+#### Bulk with progress bar
+
+    pb = nil
+    Music::Video.es.index_all do |steps, step|
+      pb = ProgressBar.create(title: "videos", total: steps, format: '%t: %p%% %a |%b>%i| %E') if pb.nil?
+      pb.increment
+    end
 
 ### Possible wrappers for results:
 
