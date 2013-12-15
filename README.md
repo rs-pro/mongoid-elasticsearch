@@ -185,7 +185,7 @@ This is the preferred (fastest) method to reindex everything
       ingr.es_update
     end
 
-#### Bulk with progress bar
+#### Bulk with [progress bar](http://rubygems.org/gems/ruby-progressbar)
 
     pb = nil
     Music::Video.es.index_all do |steps, step|
