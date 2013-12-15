@@ -172,6 +172,12 @@ index definition options and custom model serialization:
 
 ### Reindexing
 
+#### Simple bulk
+
+This is the preferred (fastest) method to reindex everything
+    
+    Music::Video.es.index_all
+
 #### Simple
 
     Communities::Thread.es.index.reset
