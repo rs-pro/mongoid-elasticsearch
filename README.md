@@ -96,7 +96,8 @@ Or install it yourself as:
 
 search syntax docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions#search-instance_method
 
-more docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
+ES Actions docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions
+ES Indices docs: http://rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Indices/Actions
 
 ES docs: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html
 
