@@ -31,6 +31,7 @@ module Mongoid
               nil
             end
           end.reject { |obj| obj.nil? }
+          next if docs.empty?
           client.bulk({body: docs}.merge(type_options))
           if block_given?
             yield steps, step
