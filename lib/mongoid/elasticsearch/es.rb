@@ -25,8 +25,12 @@ module Mongoid
         steps.times do |step|
           docs = q.skip(step * step_size).limit(step_size)
           docs = docs.map do |obj|
-            { index: {data: obj.as_indexed_json}.merge(_id: obj.id.to_s) }
-          end
+            if obj.es_index?
+              { index: {data: obj.as_indexed_json}.merge(_id: obj.id.to_s) }
+            else
+              nil
+            end
+          end.reject { |obj| obj.nil? }
           client.bulk({body: docs}.merge(type_options))
           if block_given?
             yield steps, step
