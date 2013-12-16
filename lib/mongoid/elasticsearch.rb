@@ -1,4 +1,4 @@
-require "mongoid/elasticsearch/version"
+require 'mongoid/elasticsearch/version'
 
 require 'elasticsearch'
 require 'active_support/concern'
@@ -16,8 +16,6 @@ end
 
 module Mongoid
   module Elasticsearch
-    INDEX_STEP = 300
-
     mattr_accessor :prefix
     self.prefix = ''
 

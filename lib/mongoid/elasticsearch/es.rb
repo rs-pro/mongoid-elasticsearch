@@ -1,6 +1,7 @@
 module Mongoid
   module Elasticsearch
     class Es
+      INDEX_STEP = 100
       attr_reader :klass, :version
 
       def initialize(klass)
@@ -17,12 +18,12 @@ module Mongoid
         @index ||= Index.new(self)
       end
 
-      def index_all
+      def index_all(step_size = INDEX_STEP)
         index.reset
         q = klass.order_by(_id: 1)
-        steps = (q.count / INDEX_STEP) + 1
+        steps = (q.count / step_size) + 1
         steps.times do |step|
-          docs = q.skip(step * INDEX_STEP).limit(INDEX_STEP)
+          docs = q.skip(step * step_size).limit(step_size)
           docs = docs.map do |obj|
             { index: {data: obj.as_indexed_json}.merge(_id: obj.id.to_s) }
           end
