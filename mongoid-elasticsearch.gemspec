@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "mongoid", [">= 3.0", "< 4.1"]
-  spec.add_dependency "elasticsearch", "~> 0.4.1"
+  spec.add_dependency "elasticsearch", "~> 0.4.2"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"

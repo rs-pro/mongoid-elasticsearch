@@ -10,10 +10,6 @@ require 'mongoid/elasticsearch/index'
 require 'mongoid/elasticsearch/indexing'
 require 'mongoid/elasticsearch/response'
 
-if Elasticsearch::VERSION < '0.4.1'
-  require 'mongoid/elasticsearch/slash_monkeypatch'
-end
-
 module Mongoid
   module Elasticsearch
     mattr_accessor :prefix
