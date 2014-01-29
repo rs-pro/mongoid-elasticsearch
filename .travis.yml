@@ -14,5 +14,6 @@ rvm:
 
 gemfile:
   - Gemfile
+  - gemfiles/mongoid3.gemfile
   - gemfiles/es-git.gemfile
   - gemfiles/es-0.4.1.gemfile

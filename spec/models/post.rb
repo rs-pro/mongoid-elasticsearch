@@ -3,8 +3,13 @@ class Post
 
   field :name, type: String
   field :content, type: String
-
-  field :my_object_id, type: BSON::ObjectId
+  
+  if defined?(Moped::BSON)
+    field :my_object_id, type: Moped::BSON::ObjectId
+  else
+    field :my_object_id, type: BSON::ObjectId
+  end
+  
 
   include Mongoid::Elasticsearch
   elasticsearch!

@@ -44,7 +44,14 @@ describe Article do
       @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
       @article_2 = Article.create!(name: 'tests likely an another article title')
       @article_3 = Article.create!(name: 'a strange name for this stuff')
-      @post_1 = Post.create!(name: 'object_id', my_object_id: BSON::ObjectId.new)
+      
+      if defined?(Moped::BSON)
+        @post_1 = Post.create!(name: 'object_id', my_object_id: Moped::BSON::ObjectId.new)
+      else
+        @post_1 = Post.create!(name: 'object_id', my_object_id: BSON::ObjectId.new)
+      end
+      
+      
       Article.es.index.refresh
       Post.es.index.refresh
     end
@@ -76,7 +83,12 @@ describe Article do
 
     it 'restores BSON::ObjectId with wrapper :model' do
       results = Post.es.search 'object_id'
-      results.first.my_object_id.should be_kind_of(BSON::ObjectId)
+      if defined?(Moped::BSON)
+        results.first.my_object_id.should be_kind_of(Moped::BSON::ObjectId)
+      else
+        results.first.my_object_id.should be_kind_of(BSON::ObjectId)
+      end
+      
       results.first.my_object_id.should eq(@post_1.my_object_id)
     end
 
@@ -254,6 +266,10 @@ describe "Multisearch" do
 
   it 'works' do
     response = Mongoid::Elasticsearch.search 'test'
+    #p response
+    #pp response.results
+    #pp response.raw_response
+    #pp @article_1
     response.length.should eq 4
     response.to_a.map(&:class).map(&:name).uniq.sort.should eq ['Article', 'Namespaced::Model', 'Post']
     response.select { |r| r.class == Article && r.id == @article_1.id }.first.should_not be_nil

@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem "mongoid", '~> 3.1.0'
+gem 'elasticsearch'
+gem 'mongoid_slug'
+
+gemspec path: "../"

@@ -2,7 +2,7 @@ module Namespaced
   class Model
     include Mongoid::Document
     include Mongoid::Timestamps::Short
-    include ActiveModel::ForbiddenAttributesProtection
+    #include ActiveModel::ForbiddenAttributesProtection
 
     field :name
 

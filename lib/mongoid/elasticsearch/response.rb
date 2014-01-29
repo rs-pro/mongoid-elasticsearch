@@ -61,7 +61,11 @@ module Mongoid
             hits.map do |h|
               s = h.delete('_source')
               m = Hashie::Mash.new(h.merge(s))
-              m.id = BSON::ObjectId.from_string(h['_id'])
+              if defined?(Moped::BSON)
+                m.id = Moped::BSON::ObjectId.from_string(h['_id'])
+              else
+                m.id = BSON::ObjectId.from_string(h['_id'])
+              end
               m._id = m.id
               m
             end
@@ -148,13 +152,26 @@ module Mongoid
         hits.map do |h|
           klass = find_klass(h['_type'])
           source = h.delete('_source')
-          source.each do |k,v|
-            if v.is_a?(Hash) && v.has_key?("$oid")
-              source[k] = BSON::ObjectId.from_string(v["$oid"])
+          if defined?(Moped::BSON)
+            source.each do |k,v|
+              if v.is_a?(Hash) && v.has_key?("$oid")
+                source[k] = Moped::BSON::ObjectId.from_string(v["$oid"])
+              end
+            end
+          else
+            source.each do |k,v|
+              if v.is_a?(Hash) && v.has_key?("$oid")
+                source[k] = BSON::ObjectId.from_string(v["$oid"])
+              end
             end
           end
           begin
             m = klass.new(h.merge(source))
+            if defined?(Moped::BSON)
+              m.id = Moped::BSON::ObjectId.from_string(h['_id'])
+            else
+              m.id = BSON::ObjectId.from_string(h['_id'])
+            end
           rescue Mongoid::Errors::UnknownAttribute
             klass.class_eval <<-RUBY, __FILE__, __LINE__+1
               attr_accessor :_type, :_score, :_source
