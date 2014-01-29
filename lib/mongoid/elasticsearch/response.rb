@@ -151,6 +151,7 @@ module Mongoid
       def multi_without_load
         hits.map do |h|
           klass = find_klass(h['_type'])
+          h[:_highlight] = h.delete('highlight') if h.key?('highlight')
           source = h.delete('_source')
           if defined?(Moped::BSON)
             source.each do |k,v|
@@ -174,7 +175,7 @@ module Mongoid
             end
           rescue Mongoid::Errors::UnknownAttribute
             klass.class_eval <<-RUBY, __FILE__, __LINE__+1
-              attr_accessor :_type, :_score, :_source
+              attr_accessor :_type, :_score, :_source, :_highlight
             RUBY
             m = klass.new(h.merge(source))
           end
