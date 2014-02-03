@@ -150,6 +150,36 @@ index definition options and custom model serialization:
       # mongoid_slug note: add _slugs to as_indexed_json, NOT slug
     end
     
+    # example mapping with boost
+    elasticsearch!({
+      index_name: Rails.env.test? ? 'vv_test_articles' : 'vv_articles',
+      index_options: {
+        settings: {
+          index: {
+            analysis: {
+              analyzer: {
+                my_analyzer: {
+                  type: "snowball",
+                  language: "Russian"
+                }
+              }
+            }
+          }
+        },
+        mappings: {
+          "articles/article" => {
+            _boost: {name: '_boost', null_value: 1},
+            properties: {
+              name: {type: 'string', boost: 10, analyzer: 'my_analyzer'},
+              tags: {type: 'string', analyzer: 'my_analyzer'}
+            }
+          }
+        }
+      },
+      wrapper: :load
+    })
+    
+    
 [Mapping definition docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html)    
 
 ### Pagination
