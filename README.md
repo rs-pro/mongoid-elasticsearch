@@ -150,7 +150,8 @@ index definition options and custom model serialization:
       # mongoid_slug note: add _slugs to as_indexed_json, NOT slug
     end
     
-    # example mapping with boost
+Example mapping with boost field:
+
     elasticsearch!({
       index_name: Rails.env.test? ? 'vv_test_articles' : 'vv_articles',
       index_options: {
