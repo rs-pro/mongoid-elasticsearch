@@ -55,7 +55,12 @@ module Mongoid
             if @multi
               multi_with_load
             else
-              @model.find(hits.map { |h| h['_id'] })
+              records = @model.find(hits.map { |h| h['_id'] })
+              hits.map do |item|
+                records.detect do |record|
+                  record.id.to_s == item['_id'].to_s
+                end
+              end
             end
           when :mash
             hits.map do |h|
