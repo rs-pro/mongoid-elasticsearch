@@ -1,3 +1,7 @@
+## 0.8.1 (March 4, 2014) ##
+
+* New method "Model.without_es_update!" to temporally disable callbacks (ie, for testing) (by [@xronos-i-am](https://github.com/xronos-i-am))
+
 ## 0.8.0 (March 4, 2014) ##
 
 * fix results with :load wrapper #6 (by [@xronos-i-am](https://github.com/xronos-i-am))

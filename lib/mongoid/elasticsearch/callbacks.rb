@@ -23,7 +23,7 @@ module Mongoid
           set_callback( :destroy, :after, :update_es_index )
           
           result
-        end        
+        end
       end
     end
   end
