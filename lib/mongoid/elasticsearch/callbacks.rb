@@ -4,13 +4,9 @@ module Mongoid
       extend ActiveSupport::Concern
 
       included do
-        include InstanceMethods
-
         after_save :update_es_index
         after_destroy :update_es_index
-      end
-
-      module InstanceMethods
+        
         def update_es_index
           es_update
         end
