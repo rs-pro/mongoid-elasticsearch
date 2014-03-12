@@ -10,6 +10,8 @@ require 'mongoid/elasticsearch/index'
 require 'mongoid/elasticsearch/indexing'
 require 'mongoid/elasticsearch/response'
 
+require 'mongoid/elasticsearch/monkeypatches'
+
 module Mongoid
   module Elasticsearch
     mattr_accessor :prefix
@@ -87,7 +89,7 @@ module Mongoid
       # use `_all` or empty string to perform the operation on all indices
       # regardless whether they are managed by Mongoid::Elasticsearch or not
       unless query.key?(:index)
-        query.merge!(index: Mongoid::Elasticsearch.registered_indexes.join(','), ignore_indices: 'missing')
+        query.merge!(index: Mongoid::Elasticsearch.registered_indexes.join(','), ignore_indices: 'missing', ignore_unavailable: true)
       end
 
       page = options[:page]

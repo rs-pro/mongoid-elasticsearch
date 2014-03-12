@@ -9,7 +9,7 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.0
+  - 2.1.1
   - jruby-19mode
   - jruby-20mode
 
@@ -17,4 +17,3 @@ gemfile:
   - Gemfile
   - gemfiles/mongoid3.gemfile
   - gemfiles/es-git.gemfile
-  - gemfiles/es-0.4.2.gemfile

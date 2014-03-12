@@ -21,6 +21,8 @@ require "database_cleaner"
 
 require "mongoid-elasticsearch"
 
+# Mongoid::Elasticsearch.client_options = {log: true}
+
 Mongoid::Elasticsearch.prefix = "mongoid_es_test_"
 I18n.enforce_available_locales = true
 
