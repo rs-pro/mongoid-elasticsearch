@@ -63,6 +63,7 @@ module Mongoid
         self.es_wrapper        = options[:wrapper]
 
         Mongoid::Elasticsearch.registered_indexes.push self.es_index_name
+        Mongoid::Elasticsearch.registered_indexes.uniq!
 
         unless options[:index_mappings].nil?
           self.es_index_options = self.es_index_options.deep_merge({
