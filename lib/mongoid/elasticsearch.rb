@@ -77,7 +77,7 @@ module Mongoid
         include Indexing
         include Callbacks if options[:callbacks]
 
-        es.index.create
+        es.index.create unless options[:skip_create]
       end
     end
 
