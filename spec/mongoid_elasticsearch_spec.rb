@@ -8,7 +8,7 @@ describe Article do
     Article.es.index.name.should eq 'mongoid_es_news'
     Article.es.index.type.should eq 'article'
     Article.es_wrapper.should eq :load
-    Article.es_client_options.should eq({})
+    Article.es_client_options.should eq(DEFAULT_OPT)
   end
 
   context 'index operations' do
@@ -179,7 +179,7 @@ describe Post do
   it 'properly uses options' do
     Post.es_index_name.should eq 'mongoid_es_test_posts'
     Post.es_wrapper.should eq :model
-    Post.es_client_options.should eq({})
+    Post.es_client_options.should eq(DEFAULT_OPT)
   end
 
   context 'index operations' do
@@ -297,7 +297,7 @@ describe Namespaced::Model do
     Namespaced::Model.es.index.name.should eq 'mongoid_es_test_namespaced_models'
     Namespaced::Model.es.index.type.should eq 'namespaced/model'
     Namespaced::Model.es_wrapper.should eq :model
-    Namespaced::Model.es_client_options.should eq({})
+    Namespaced::Model.es_client_options.should eq(DEFAULT_OPT)
   end
 
   context 'index operations' do

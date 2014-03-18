@@ -1,6 +1,6 @@
+require 'elasticsearch'
 require 'mongoid/elasticsearch/version'
 
-require 'elasticsearch'
 require 'active_support/concern'
 
 require 'mongoid/elasticsearch/utils'
@@ -22,6 +22,9 @@ module Mongoid
 
     mattr_accessor :registered_indexes
     self.registered_indexes = []
+    
+    mattr_accessor :registered_models
+    self.registered_models = []
 
     extend ActiveSupport::Concern
     included do
@@ -65,6 +68,9 @@ module Mongoid
         Mongoid::Elasticsearch.registered_indexes.push self.es_index_name
         Mongoid::Elasticsearch.registered_indexes.uniq!
 
+        Mongoid::Elasticsearch.registered_models.push self.name
+        Mongoid::Elasticsearch.registered_models.uniq!
+
         unless options[:index_mappings].nil?
           self.es_index_options = self.es_index_options.deep_merge({
             :mappings => {
@@ -77,8 +83,13 @@ module Mongoid
 
         include Indexing
         include Callbacks if options[:callbacks]
+      end
+    end
 
-        es.index.create
+    def self.create_all_indexes!
+      puts "creating ES indexes"
+      Mongoid::Elasticsearch.registered_models.each do |model_name|
+        model_name.constantize.es.index.create
       end
     end
 
@@ -101,8 +112,12 @@ module Mongoid
 
       options[:wrapper] ||= :model
 
-      client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options
+      client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options.dup
       Response.new(client, query, true, nil, options)
     end
   end
+end
+
+if defined? Rails
+  require 'mongoid/elasticsearch/railtie'
 end
