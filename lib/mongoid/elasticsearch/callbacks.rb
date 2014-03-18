@@ -4,13 +4,26 @@ module Mongoid
       extend ActiveSupport::Concern
 
       included do
-        after_save do
+        after_save :update_es_index
+        after_destroy :update_es_index
+        
+        def update_es_index
           es_update
         end
+      end
 
-        after_destroy do
-          es_update
-        end
+      module ClassMethods
+        def without_es_update!( &block )
+          skip_callback( :save, :after, :update_es_index )
+          skip_callback( :destroy, :after, :update_es_index )
+          
+          result = yield
+
+          set_callback( :save, :after, :update_es_index )
+          set_callback( :destroy, :after, :update_es_index )
+          
+          result
+        end        
       end
     end
   end

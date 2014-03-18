@@ -1,4 +1,5 @@
-# coding: utf-8
+# encoding: utf-8
+
 require "spec_helper"
 
 describe Article do
@@ -39,6 +40,7 @@ describe Article do
     end
   end
 
+
   context 'searching' do
     before :each do
       @article_1 = Article.create!(name: 'test article name likes', tags: 'likely')
@@ -69,6 +71,11 @@ describe Article do
       expect(Article).to receive(:find).once.with([@article_2.id.to_s]).and_call_original
       results.first.slug.should eq @article_2.name.to_url
       results.first.to_param.should eq @article_2.name.to_url
+    end
+
+    it 'mongoid_slug with sort and wrapper: :load' do
+      results = Article.es.search body: { query: { match_all: {} }, sort: { 'name.raw' => 'desc' } }
+      results.map( &:id ).should eq Article.all.desc( :name ).map( &:id )
     end
 
     it 'mongoid_slug with wrapper: :model' do
@@ -103,6 +110,7 @@ describe Article do
     else
       pending "completion suggester not supported in ES version #{Article.es.version}"
     end
+
   end
 
   context 'pagination' do
@@ -401,3 +409,4 @@ describe 'utils' do
     Mongoid::Elasticsearch::Utils.clean('    test     test    ').should eq 'test test'
   end
 end
+
