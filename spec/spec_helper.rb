@@ -21,6 +21,13 @@ require "database_cleaner"
 
 require "mongoid-elasticsearch"
 
+if ENV['CI_ADAPTER'] == 'httpclient'
+  puts "testing with httpclient"
+  require 'httpclient'
+  Faraday.default_adapter = :httpclient
+end
+
+
 # Mongoid::Elasticsearch.client_options = {log: true}
 
 Mongoid::Elasticsearch.prefix = "mongoid_es_test_"

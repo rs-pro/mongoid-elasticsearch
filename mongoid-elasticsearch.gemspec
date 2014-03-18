@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "hashie"
   spec.add_development_dependency "mongoid_slug"
+  spec.add_development_dependency "glebtv-httpclient"
 end

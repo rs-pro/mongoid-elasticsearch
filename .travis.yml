@@ -13,6 +13,10 @@ rvm:
   - jruby-19mode
   - jruby-20mode
 
+env:
+  - "CI_ADAPTER="
+  - "CI_ADAPTER=httpclient"
+  
 gemfile:
   - Gemfile
   - gemfiles/mongoid3.gemfile
