@@ -115,6 +115,6 @@ module Mongoid
   end
 end
 
-if defined? Rails::Railtie
+if defined? Rails
   require 'mongoid/elasticsearch/railtie'
 end
