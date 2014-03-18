@@ -7,16 +7,10 @@ notifications:
 
 language: ruby
 rvm:
-  - 1.9.3
   - 2.0.0
   - 2.1.1
-  - jruby-19mode
   - jruby-20mode
 
-env:
-  - "CI_ADAPTER="
-  - "CI_ADAPTER=httpclient"
-  
 gemfile:
   - Gemfile
   - gemfiles/mongoid3.gemfile
