@@ -100,7 +100,7 @@ module Mongoid
 
       options[:wrapper] ||= :model
 
-      client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options
+      client = ::Elasticsearch::Client.new Mongoid::Elasticsearch.client_options.dup
       Response.new(client, query, true, nil, options)
     end
   end
