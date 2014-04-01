@@ -14,6 +14,9 @@ require 'mongoid/elasticsearch/monkeypatches'
 
 module Mongoid
   module Elasticsearch
+    mattr_accessor :autocreate_indexes
+    self.autocreate_indexes = true
+    
     mattr_accessor :prefix
     self.prefix = ''
 
@@ -51,19 +54,21 @@ module Mongoid
           index_options: {},
           index_mappings: nil,
           wrapper: :model,
-          callbacks: true
+          callbacks: true,
+          skip_create: false
         }.merge(options)
         
         if options[:wrapper] == :model
           attr_accessor :_type, :_score, :_source
         end
 
-        cattr_accessor :es_client_options, :es_index_name, :es_index_options, :es_wrapper
+        cattr_accessor :es_client_options, :es_index_name, :es_index_options, :es_wrapper, :es_skip_create
 
         self.es_client_options = Mongoid::Elasticsearch.client_options.dup.merge(options[:client_options])
         self.es_index_name     = (options[:prefix_name] ? Mongoid::Elasticsearch.prefix : '') + (options[:index_name] || model_name.plural)
         self.es_index_options  = options[:index_options]
         self.es_wrapper        = options[:wrapper]
+        self.es_skip_create    = options[:skip_create]
 
         Mongoid::Elasticsearch.registered_indexes.push self.es_index_name
         Mongoid::Elasticsearch.registered_indexes.uniq!
@@ -87,9 +92,10 @@ module Mongoid
     end
 
     def self.create_all_indexes!
-      puts "creating ES indexes"
+      # puts "creating ES indexes"
       Mongoid::Elasticsearch.registered_models.each do |model_name|
-        model_name.constantize.es.index.create
+        model = model_name.constantize
+        model.es.index.create unless model.es_skip_create
       end
     end
 

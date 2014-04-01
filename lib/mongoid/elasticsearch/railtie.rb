@@ -4,8 +4,8 @@ module Mongoid::Elasticsearch
       require File.expand_path('../tasks', __FILE__)
     end
     
-    initializer 'elasticsearch.load_app' do
-      Mongoid::Elasticsearch.create_all_indexes!
+    config.after_initialize do
+      Mongoid::Elasticsearch.create_all_indexes! if Mongoid::Elasticsearch.autocreate_indexes
     end
   end
 end

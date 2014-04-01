@@ -235,6 +235,17 @@ This is the preferred (fastest) method to reindex everything
 
 See more examples in specs.
 
+### Index creation
+
+This gem by default automatically creates indexes for all configured models on application startup.
+
+Set ```Mongoid::Elasticsearch.autocreate_indexes = false``` in an initalizer to prevent automatic creation for all indexes.
+
+You can always use ```rake es:create``` to create all indexes or call ```Mongoid::Elasticsearch.create_all_indexes!```.
+
+Indexes defined with option ```skip_create: true``` are not created with all other indexes and must be created manually with ```Model.es.index.create```
+
+
 #### Util
 
     # Escape string so it can be safely passed to ES (removes all special characters)

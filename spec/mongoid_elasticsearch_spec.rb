@@ -410,3 +410,18 @@ describe 'utils' do
   end
 end
 
+
+describe 'no autocreate' do
+  it "desn't create index automatically" do
+    NoAutocreate.es.index.delete
+    NoAutocreate.es.index.exists?.should be_false
+    
+    Mongoid::Elasticsearch.create_all_indexes!
+    NoAutocreate.es.index.exists?.should be_false
+    
+    NoAutocreate.es.index.force_create
+    NoAutocreate.es.index.exists?.should be_true
+    
+    NoAutocreate.es.index.delete
+  end
+end
