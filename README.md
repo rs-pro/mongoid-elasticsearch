@@ -205,25 +205,21 @@ Example mapping with boost field:
 
 ### Reindexing
 
-#### Simple bulk
+#### All models
+
+```rake es:reindex``` will reindex all indices managed by Mongoid::Elasticsearch
+
+#### One model - Simple bulk
 
 This is the preferred (fastest) method to reindex everything
     
     Music::Video.es.index_all
 
-#### Simple
+#### One model - Simple
 
     Communities::Thread.es.index.reset
     Communities::Thread.enabled.each do |ingr|
       ingr.es_update
-    end
-
-#### Bulk with [progress bar](http://rubygems.org/gems/ruby-progressbar)
-
-    pb = nil
-    Music::Video.es.index_all do |steps, step|
-      pb = ProgressBar.create(title: "videos", total: steps, format: '%t: %p%% %a |%b>%i| %E') if pb.nil?
-      pb.increment
     end
 
 ### Possible wrappers for results:
