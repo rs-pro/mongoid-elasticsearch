@@ -54,7 +54,7 @@ module Mongoid
       end
 
       def last_page?
-        current_page == total_pages
+        total_pages == 0 || current_page == total_pages
       end
 
 
