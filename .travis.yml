@@ -9,7 +9,7 @@ language: ruby
 rvm:
   - 2.0.0
   - 2.1.2
-  - jruby-21mode
+  - jruby-head
 
 gemfile:
   - Gemfile
