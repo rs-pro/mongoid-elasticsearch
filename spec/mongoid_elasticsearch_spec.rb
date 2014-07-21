@@ -126,7 +126,6 @@ describe Article do
 
     it 'paging works with empty results' do
       result = Article.es.search('bad_request', per_page: 7, page: 1)
-      p result
       expect(result.num_pages).to eq 0
       expect(result.current_page).to eq 1
       expect(result.total_entries).to eq 0
@@ -353,6 +352,20 @@ describe Namespaced::Model do
       expect(results.to_a.count).to eq 1
       expect(results.first.id).to eq @article_2.id
       expect(results.first.name).to eq @article_2.name
+    end
+
+    it 'searches in field' do
+      results = Namespaced::Model.es.search body: {query: {terms: {name: ['likely']}}}
+      expect(results.count).to eq 1
+      expect(results.to_a.count).to eq 1
+      expect(results.first.id).to eq @article_2.id
+      expect(results.first.name).to eq @article_2.name
+    end
+
+    it 'searches in field - when no match' do
+      results = Namespaced::Model.es.search body: {query: {terms: {name: ['not_matched']}}}
+      expect(results.count).to eq 0
+      expect(results.to_a.count).to eq 0
     end
   end
 

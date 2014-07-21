@@ -7,11 +7,10 @@ notifications:
 
 language: ruby
 rvm:
-  - 2.0.0
   - 2.1.2
   - jruby-head
 
 gemfile:
   - Gemfile
   - gemfiles/mongoid3.gemfile
-  - gemfiles/es-git.gemfile
+
