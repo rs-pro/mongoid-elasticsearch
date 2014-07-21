@@ -8,8 +8,8 @@ notifications:
 language: ruby
 rvm:
   - 2.0.0
-  - 2.1.1
-  - jruby-20mode
+  - 2.1.2
+  - jruby-21mode
 
 gemfile:
   - Gemfile
