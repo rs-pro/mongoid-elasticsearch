@@ -104,7 +104,7 @@ module Mongoid
       end
 
       def inspect
-        "#<Mongoid::Elasticsearch::Response @size:#{size} @results:#{results.inspect} @error=#{success? ? "none" : error} @raw_response=#{raw_response}>"
+        "#<Mongoid::Elasticsearch::Response @size:#{@results.nil? ? 'not run yet' : size} @results:#{@results.inspect} @raw_response=#{@raw_response}>"
       end
 
       def count

@@ -45,14 +45,14 @@ module Mongoid
         end
 
         page = options[:page]
-        per_page = options[:per_page]
+        per_page = options[:per_page].nil? ? options[:per] : options[:per_page]
 
         query[:size] = ( per_page.to_i ) if per_page
         query[:from] = ( page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1)) ) if page && per_page
 
         options[:wrapper] ||= klass.es_wrapper
 
-        Response.new(client, query.merge(type_options), false, klass, options)
+        Response.new(client, query.merge(custom_type_options(options)), false, klass, options)
       end
 
       def all(options = {})
@@ -61,6 +61,14 @@ module Mongoid
 
       def options_for(obj)
         {id: obj.id.to_s}.merge type_options
+      end
+
+      def custom_type_options(options)
+        if !options[:include_type].nil? && options[:include_type] == false
+          {index: index.name}
+        else
+          type_options
+        end
       end
 
       def type_options

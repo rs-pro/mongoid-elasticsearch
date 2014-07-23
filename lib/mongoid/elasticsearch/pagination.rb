@@ -10,7 +10,7 @@ module Mongoid
       end
 
       def per_page
-        (@options[:per_page] || @options[:size] || 10 ).to_i
+        (@options[:per_page] || @options[:per] || @options[:size] || 10 ).to_i
       end
 
       def total_pages
