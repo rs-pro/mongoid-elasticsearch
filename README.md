@@ -199,7 +199,7 @@ Example mapping with boost field:
           term: {community_id: @community.id.to_s}
         }
       }},
-      page: params[:page], wrapper: :load
+      from: params[:page], size: 25
     )
 
 ### Reindexing
