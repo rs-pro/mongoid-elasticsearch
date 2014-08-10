@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/rs-pro/mongoid-elasticsearch.png?branch=master)](https://travis-ci.org/rs-pro/mongoid-elasticsearch)
 [![Coverage Status](https://coveralls.io/repos/rs-pro/mongoid-elasticsearch/badge.png?branch=master)](https://coveralls.io/r/rs-pro/mongoid-elasticsearch?branch=master)
 [![Gem Version](https://badge.fury.io/rb/mongoid-elasticsearch.png)](http://badge.fury.io/rb/mongoid-elasticsearch)
-[![Dependency Status](https://www.versioneye.com/ruby/mongoid-elasticsearch/0.8.2/badge.svg)](https://www.versioneye.com/ruby/mongoid-elasticsearch/0.8.2)
+[![Dependency Status](https://www.versioneye.com/user/projects/53e73fe735080d1e4d00009c/badge.svg?style=flat)](https://www.versioneye.com/user/projects/53e73fe735080d1e4d00009c)
 
 Use [Elasticsearch](http://www.elasticsearch.org/) with mongoid with just a few
 lines of code
