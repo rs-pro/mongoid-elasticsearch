@@ -8,7 +8,7 @@ notifications:
 language: ruby
 rvm:
   - 2.1.2
-  - jruby-head
+  - jruby
 
 gemfile:
   - Gemfile
