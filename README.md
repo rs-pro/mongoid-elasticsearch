@@ -5,7 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/mongoid-elasticsearch.png)](http://badge.fury.io/rb/mongoid-elasticsearch)
 [![Dependency Status](https://www.versioneye.com/user/projects/53e73fe735080d1e4d00009c/badge.svg)](https://www.versioneye.com/user/projects/53e73fe735080d1e4d00009c)
 [![Issues](http://img.shields.io/github/issues/rs-pro/mongoid-elasticsearch.svg)](https://github.com/rs-pro/mongoid-elasticsearch/issues)
-[![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/rs-pro/mongoid-elasticsearch/blob/master/LICENSE.txt)
+[![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/rs-pro/mongoid-elasticsearch/blob/master/MIT-LICENSE.txt)
 
 
 Use [Elasticsearch](http://www.elasticsearch.org/) with mongoid with just a few
