@@ -20,10 +20,16 @@ module Mongoid
 
       def index_all(step_size = INDEX_STEP)
         index.reset
-        q = klass.order_by(_id: 1)
+        q = klass.asc(:id)
         steps = (q.count / step_size) + 1
+        last_id = nil
         steps.times do |step|
-          docs = q.skip(step * step_size).limit(step_size)
+          if last_id
+            docs = q.gt(id: last_id).limit(step_size).to_a
+          else
+            docs = q.limit(step_size).to_a
+          end
+          last_id = docs.last.try(:id)
           docs = docs.map do |obj|
             if obj.es_index?
               { index: {data: obj.as_indexed_json}.merge(_id: obj.id.to_s) }
@@ -36,7 +42,7 @@ module Mongoid
           if block_given?
             yield steps, step
           end
-        end
+        end       
       end
 
       def search(query, options = {})
