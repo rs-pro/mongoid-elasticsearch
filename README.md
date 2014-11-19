@@ -68,7 +68,7 @@ Or install it yourself as:
     result.results # by default returns an Enumerable with Post instances exactly
                    # like they were loaded from MongoDB
     Post.es.index.create # create index (done automatically on app boot)
-    Post.es.index.destroy # drop index
+    Post.es.index.delete # drop index
     Post.es.index.reset # recreate index
     Post.es.index.refresh # force index update (useful for specs)
     Post.es.client # Elasticsearch::Client instance
