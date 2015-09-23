@@ -58,7 +58,7 @@ module Mongoid
 
         options[:wrapper] ||= klass.es_wrapper
 
-        Response.new(client, query.merge(custom_type_options(options)), false, klass, options)
+        Response.new(client, query.merge(custom_type_options(options)), false, options[:scope] || klass, options)
       end
 
       def all(options = {})
