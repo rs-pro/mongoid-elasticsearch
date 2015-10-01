@@ -18,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "mongoid", [">= 3.0", "< 4.1"]
-  spec.add_dependency "elasticsearch", "~> 1.0.1"
+  spec.add_dependency "mongoid", [">= 3.0", "< 6.0"]
+  spec.add_dependency "elasticsearch", "~> 1.0.13"
   spec.add_dependency "ruby-progressbar"
 
   spec.add_development_dependency "bundler"
@@ -29,6 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "hashie"
-  spec.add_development_dependency "mongoid_slug"
+  spec.add_development_dependency "mongoid-slug", '~> 5.0.0'
   spec.add_development_dependency "glebtv-httpclient"
 end

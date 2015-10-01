@@ -28,6 +28,7 @@ else
   DEFAULT_OPT = {}
 end
 Mongoid::Elasticsearch.client_options = DEFAULT_OPT.dup
+Mongo::Logger.logger.level = ::Logger::FATAL
 
 # Mongoid::Elasticsearch.client_options = {log: true}
 
@@ -46,7 +47,7 @@ DatabaseCleaner.orm = "mongoid"
 
 RSpec.configure do |config|
   config.before(:all) do
-    DatabaseCleaner.strategy = :truncation
+    #DatabaseCleaner.strategy = :truncation
     Article.es.index.reset
     Post.es.index.reset
     Nowrapper.es.index.reset
