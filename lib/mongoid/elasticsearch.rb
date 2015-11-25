@@ -50,6 +50,7 @@ module Mongoid
         options = {
           prefix_name: true,
           index_name: nil,
+          index_type: nil,
           client_options: {},
           index_options: {},
           index_mappings: nil,
@@ -62,10 +63,11 @@ module Mongoid
           attr_accessor :_type, :_score, :_source
         end
 
-        cattr_accessor :es_client_options, :es_index_name, :es_index_options, :es_wrapper, :es_skip_create
+        cattr_accessor :es_client_options, :es_index_name, :es_index_type, :es_index_options, :es_wrapper, :es_skip_create
 
         self.es_client_options = Mongoid::Elasticsearch.client_options.dup.merge(options[:client_options])
         self.es_index_name     = (options[:prefix_name] ? Mongoid::Elasticsearch.prefix : '') + (options[:index_name] || model_name.plural)
+        self.es_index_type     = options[:index_type] || model_name.collection.singularize
         self.es_index_options  = options[:index_options]
         self.es_wrapper        = options[:wrapper]
         self.es_skip_create    = options[:skip_create]

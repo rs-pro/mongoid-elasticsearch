@@ -6,6 +6,7 @@ describe Article do
   it 'properly uses options' do
     expect(Article.es_index_name).to eq 'mongoid_es_news'
     expect(Article.es.index.name).to eq 'mongoid_es_news'
+    expect(Article.es_index_type).to eq 'article'
     expect(Article.es.index.type).to eq 'article'
     expect(Article.es_wrapper).to eq :load
     expect(Article.es_client_options).to eq(DEFAULT_OPT)
@@ -308,6 +309,7 @@ describe Namespaced::Model do
   it 'properly uses options' do
     expect(Namespaced::Model.es_index_name).to eq 'mongoid_es_test_namespaced_models'
     expect(Namespaced::Model.es.index.name).to eq 'mongoid_es_test_namespaced_models'
+    expect(Namespaced::Model.es_index_type).to eq 'namespaced/model'
     expect(Namespaced::Model.es.index.type).to eq 'namespaced/model'
     expect(Namespaced::Model.es_wrapper).to eq :model
     expect(Namespaced::Model.es_client_options).to eq(DEFAULT_OPT)

@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "kaminari"
-  spec.add_development_dependency "database_cleaner"
+  # spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "hashie"
   spec.add_development_dependency "mongoid-slug", '~> 5.0.0'

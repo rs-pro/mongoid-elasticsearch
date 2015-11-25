@@ -14,7 +14,7 @@ module Mongoid
       end
 
       def type
-        klass.model_name.collection.singularize
+        klass.es_index_type
       end
 
       def options
