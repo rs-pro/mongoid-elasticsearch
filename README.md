@@ -1,3 +1,5 @@
+# DEPRECATED - Consider using [SearchKick](https://github.com/ankane/searchkick)
+
 # Mongoid::Elasticsearch
 
 [![Build Status](https://travis-ci.org/rs-pro/mongoid-elasticsearch.png?branch=master)](https://travis-ci.org/rs-pro/mongoid-elasticsearch)
