@@ -32,6 +32,7 @@ Mongo::Logger.logger.level = ::Logger::FATAL
 
 # Mongoid::Elasticsearch.client_options = {log: true}
 
+# Mongoid::Elasticsearch.client_options = {urls: ['http://127.0.0.1:9205']}
 Mongoid::Elasticsearch.prefix = "mongoid_es_test_"
 I18n.enforce_available_locales = true
 
