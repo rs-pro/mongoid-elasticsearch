@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "mongoid", [">= 3.0", "< 6.0"]
+  spec.add_dependency "mongoid", [">= 3.0", "< 8.0"]
   spec.add_dependency "elasticsearch", "~> 1.0"
   spec.add_dependency "ruby-progressbar"
 
